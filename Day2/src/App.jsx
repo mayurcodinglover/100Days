@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./App.css";
 
 function App() {
   const [todos, setTodos] = useState([]);
@@ -8,7 +9,7 @@ function App() {
 
   const addTodo = () => {
     if (todo.trim() === "") return;
-    setTodos((t) => [...t, todo]);
+    setTodos((prev) => [...prev, todo]);
     setTodo("");
   };
 
@@ -33,30 +34,30 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-gradient-to-r from-gray-800 to-gray-900 text-white p-6">
-      <h1 className="text-4xl font-bold mb-8 mt-6">📝 Todo App</h1>
+    <div className="min-h-screen flex flex-col items-center bg-gradient-to-r from-gray-800 to-gray-900 text-white p-6">
+      <h1 className="font-bold text-4xl mb-6 mt-4">📝 Todo App</h1>
 
-      <div className="w-full max-w-md bg-gray-800 rounded-2xl shadow-xl p-6">
+      <div className="bg-gray-800 w-full max-w-md rounded-2xl p-6 shadow-xl">
         {/* Input box */}
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-3 mb-4">
           <input
             type="text"
-            placeholder="Enter Todo"
-            className="flex-grow p-2 rounded-lg bg-gray-700 text-white outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter Todo.."
+            className="flex-grow p-2 rounded-lg bg-gray-700 text-white border border-gray-600 outline-none focus:ring-2 focus:ring-blue-500 font-semibold"
             value={todo}
             onChange={(e) => setTodo(e.target.value)}
           />
           {edit ? (
             <button
               onClick={updateTodo}
-              className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg text-white font-semibold transition"
+              className="bg-yellow-500 hover:bg-yellow-600 px-4 py-2 rounded-lg text-white font-bold transition"
             >
               Update
             </button>
           ) : (
             <button
               onClick={addTodo}
-              className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white font-semibold transition"
+              className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white font-bold transition"
             >
               Add
             </button>
@@ -64,26 +65,28 @@ function App() {
         </div>
 
         {/* Todo List */}
-        <ul className="space-y-3">
+        <ul className="space-y-3 max-h-[25rem] overflow-y-auto">
           {todos.length === 0 ? (
-            <p className="text-gray-400 text-center">No todos yet 😴</p>
+            <p className="text-gray-400 text-center font-semibold">
+              No todos yet 😴
+            </p>
           ) : (
             todos.map((todo, id) => (
               <li
                 key={id}
-                className="flex items-center justify-between bg-gray-700 px-4 py-2 rounded-lg shadow-md"
+                className="flex justify-between items-center bg-gray-700 px-4 py-2 rounded-lg shadow-md"
               >
-                <span className="text-lg">{todo}</span>
+                <span className="text-lg font-semibold">{todo}</span>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setEditTodo(todo, id)}
-                    className="bg-yellow-500 hover:bg-yellow-600 px-3 py-1 rounded-lg text-sm font-semibold transition"
+                    className="bg-yellow-500 hover:bg-yellow-600 px-3 py-1 rounded-md text-sm font-bold transition"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => deleteTodo(id)}
-                    className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded-lg text-sm font-semibold transition"
+                    className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-md text-sm font-bold transition"
                   >
                     Delete
                   </button>
