@@ -10,9 +10,22 @@ function App() {
     }
     else if(e.target.value==="=")
     {
-      setString(eval(string));
+      if(string[string.length-1]==="0" && string[string.length-2]==="/")
+      {
+        setString("Error");
+      }
+      else{
+        setString(eval(string));
+      }
     }
     else{
+      if(e.target.value==="+" || e.target.value==="-"|| e.target.value==="*" || e.target.value==="/")
+      {
+        if(string[string.length-1]=="+" || string[string.length-1]=="-" || string[string.length-1]=="*" || string[string.length-1]=="/")
+        {
+          return;
+        }
+      }
       setString((string)=>(string+e.target.value)) ;
     }
     
