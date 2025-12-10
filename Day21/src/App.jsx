@@ -3,8 +3,7 @@ import './App.css'
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function App() {
-
-  let product = [
+    let product = [
     {
       image: "https://picsum.photos/300/200?random=1",
       name: "Wireless Bluetooth Headphones",
@@ -76,6 +75,12 @@ function App() {
       price: "1599"
     }
   ];
+  const [currentPage, setcurrentPage] = useState(1);
+  const itemsPerPage=3;
+  const startIndex=(currentPage-1)*itemsPerPage;
+  const currentItems=product.slice(startIndex,startIndex+itemsPerPage);
+  const totalPages=Math.ceil(product.length/itemsPerPage);
+
 
   return (
     <>
@@ -83,8 +88,8 @@ function App() {
         <h1 className="text-3xl font-bold text-center">Featured Product</h1>
         <p className="text-center text-gray-600 mb-6">Discover amazing products at great prices</p>
 
-        <div className="grid grid-cols-4 gap-4">
-          {product.map((product,index)=>{
+        <div className="grid grid-cols-3 gap-6">
+          {currentItems.map((product,index)=>{
             return <>
                    <div className="shadow-md rounded-lg max-w-xs flex flex-col p-4">
             <img src={product.image} alt="" className="h-40 w-full rounded-md" />
@@ -110,10 +115,42 @@ function App() {
 
             <p className="text-left w-full text-lg font-semibold mt-2">${product.price}</p>
           </div>
+          
             </>
+            
           })}
          
         </div>
+       <div className="flex items-center justify-center gap-4 mt-6">
+  <button
+    onClick={() => setcurrentPage((p) => Math.max(1, p - 1))}
+    disabled={currentPage === 1}
+    className={`px-4 py-2 rounded-full text-white font-semibold transition 
+      ${currentPage === 1 
+        ? "bg-gray-300 cursor-not-allowed" 
+        : "bg-blue-600 hover:bg-blue-700 shadow-md"}
+    `}
+  >
+    ← Prev
+  </button>
+
+  <p className="text-lg font-bold">
+    {currentPage} <span className="text-gray-500">/</span> {totalPages}
+  </p>
+
+  <button
+    onClick={() => setcurrentPage((p) => Math.min(totalPages, p + 1))}
+    disabled={currentPage === totalPages}
+    className={`px-4 py-2 rounded-full text-white font-semibold transition 
+      ${currentPage === totalPages
+        ? "bg-gray-300 cursor-not-allowed"
+        : "bg-blue-600 hover:bg-blue-700 shadow-md"}
+    `}
+  >
+    Next →
+  </button>
+</div>
+
       </div>
     </>
   );
