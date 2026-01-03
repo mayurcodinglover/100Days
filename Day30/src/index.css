@@ -1,0 +1,31 @@
+@import "tailwindcss";
+.app {
+  text-align: center;
+  font-family: Arial;
+}
+
+.progress-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: conic-gradient(#3b82f6 100%, #e5e7eb 0%);
+}
+
+.progress-circle::before {
+  content: "";
+  width: 160px;
+  height: 160px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.progress-circle span {
+  position: relative;
+  font-size: 32px;
+  font-weight: bold;
+}
