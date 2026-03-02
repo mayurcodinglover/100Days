@@ -1,15 +1,27 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 import { useDispatch } from 'react-redux';
-import { addTodo } from '../Slice/todoSlice';
+import { addTodo,updateTodo } from '../Slice/todoSlice';
 
-const AddTodo = () => {
-    const [text, setText] = useState("");
+const AddTodo = ({editText,setEditText}) => {
+    const [text, setText] = useState(editText.text || "");
+    const [btnText, setBtnText] = useState("Add");
     const dispatch = useDispatch();
-
+    useEffect(() => {
+        setText(editText.text);
+        setBtnText(editText.id ? "Update" : "Add");
+    }, [editText.text,editText.id]);
+    
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!text.trim()) return;
+        if(editText.id){
+            dispatch(updateTodo({id:editText.id,text}));
+            setText("");
+            setEditText({id:"",text:""});
+            return;
+        }
         dispatch(addTodo(text));
         setText("");
     }
@@ -43,7 +55,7 @@ const AddTodo = () => {
                             disabled={!text.trim()}
                             className="px-6 py-4 bg-amber-400 text-zinc-950 text-sm font-black tracking-widest uppercase hover:bg-amber-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200 active:scale-95"
                         >
-                            Add
+                            {btnText}
                         </button>
                     </div>
                     <p className="mt-3 text-xs text-zinc-600 font-mono pl-1">

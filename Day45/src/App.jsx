@@ -6,13 +6,17 @@ import AddTodo from './components/AddTodo'
 import ListTodo from './components/ListTodo'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [editText, setEditText] = useState({
+    id:"",
+    text:""
+  });
+  
   return (
+
     <>
      <div>
-        <AddTodo />
-    <ListTodo />
+        <AddTodo editText={editText} setEditText={setEditText}/>
+    <ListTodo setEditText={setEditText} />
      </div>
     </>
   )

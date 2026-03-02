@@ -2,9 +2,17 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux';
 import { removeTodo } from '../Slice/todoSlice';
 
-const ListTodo = () => {
+const ListTodo = ({setEditText}) => {
     const todos = useSelector(state => state.todos.todos);
     const dispatch = useDispatch();
+    const editTodo=(id)=>{
+        const todoToEdit=todos.find(todo=>todo.id===id);
+        console.log(todoToEdit);
+        
+        if(todoToEdit){
+            setEditText(todoToEdit);
+        }
+    }
 
     return (
         <div className="bg-zinc-950 flex items-start justify-center p-6 pt-12">
@@ -60,6 +68,27 @@ const ListTodo = () => {
                                         <path d="M3 6h18M19 6l-1 14H6L5 6M10 11v6M14 11v6M9 6V4h6v2"/>
                                     </svg>
                                 </button>
+                                <button
+    onClick={() => editTodo(todo.id)}
+    className="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-zinc-600 hover:bg-blue-500/10 hover:text-blue-400 transition-all duration-200 opacity-0 group-hover:opacity-100"
+    aria-label="Edit todo"
+>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+    >
+        {/* Pencil Edit Icon */}
+        <path d="M12 20h9"/>
+        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+    </svg>
+</button>
                             </li>
                         ))}
                     </ul>
