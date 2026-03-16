@@ -1,7 +1,9 @@
 import prisma from "@/lib/prisma";
 import {NextResponse} from "next/server";
 import bcrypt from "bcrypt";
+import crypto from "crypto"
 import { signAccessToken,signRefreshToken,refreshCookieOptions } from "../../../../lib/jwt";
+import { sendValidationEmail } from "../../../../lib/email";
 
 export async function POST(request){
    try {
@@ -25,12 +27,15 @@ export async function POST(request){
         return NextResponse.json({success:false,message:"User Already Exist"});
     }
     const passwordHash=await bcrypt.hash(password,10);
-
+    const verificationToken=crypto.randomBytes(32).toString("hex");
+    const verificationExpiry=new Date(Date.now()+24*60*60*1000);
     const User=await prisma.user.create({
         data:{
             name:name,
             email:email,
-            password:passwordHash
+            password:passwordHash,
+            verifiedToken:verificationToken,
+            verifiedExpiry:verificationExpiry
         },
         select:{
             name:true,
@@ -39,25 +44,8 @@ export async function POST(request){
         }
     });
 
-    const tokenPayload={
-        id:User.id,
-        email:User.email
-    };
+    sendValidationEmail(User.email,User.name,verificationToken).catch((err)=>console.error("Email send Failed ",err));
 
-    const accessToken=signAccessToken(tokenPayload);
-
-    const refreshToken=signRefreshToken({id:User.id});
-
-    const response=NextResponse.json({
-        success:true,
-        message:"User Registered successfully",
-        data:{
-            User,
-            accessToken
-        }
-    },{status:201});
-
-    response.cookies.set("refreshToken",refreshToken,refreshCookieOptions);
     return response;
    } catch (error) {
         console.error(error)
